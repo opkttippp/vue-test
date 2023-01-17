@@ -36,25 +36,13 @@
       </div>
     </div>
 
-
-        <div class="page__wraper">
-          <div v-for="pageNumber in totalPage"
-               :key="pageNumber"
-               class="page"
-               :class="{'current-page': page === pageNumber}"
-               @click="changeNumber(pageNumber)"
-          >
-            {{pageNumber}}
-          </div>
-        </div>
+    <div ref="observer" class="observer"></div>
 
   </div>
 
 </template>
 
-
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
 
 import FormReview from './components/FormReview.vue'
 import ListReview from './components/ListReview.vue'
@@ -89,9 +77,6 @@ export default {
     }
   },
   watch: {
-    page() {
-       this.fetchReview();
-    }
   },
   computed: {
     sortRev() {
@@ -103,6 +88,18 @@ export default {
   },
   mounted() {
     this.fetchReview();
+    console.log(this.$refs.observer);
+    const options = {
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+    const callback = (entries) => {
+      if (entries[0].isIntersecting && this.page < this.totalPage) {
+        this.loadReview()
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
   methods: {
     createRev(review) {
@@ -131,118 +128,33 @@ export default {
       } finally {
         this.upload = false;
       }
-
+    },
+    async loadReview() {
+      this.page +=1;
+      const res = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+        params: {
+          _page: this.page,
+          _limit: this.limit,
+        }
+      });
+      try {
+        this.totalPage = Math.ceil(res.headers['x-total-count'] / this.limit);
+        this.reviews = [...this.reviews, ...res.data]
+      } catch (e) {
+        alert('Ошибка подключения' + e.message);
+      }
     },
     closeModal() {
       this.show = false;
     },
-    changeNumber(pageNumber) {
-      this.page = pageNumber;
-    }
   }
 }
-//
-// // let result = new Promise((resolve, reject)=>{
-// //   setTimeout(() => resolve('Hello word!!!') ,100);
-// //   setTimeout(() => reject(new Error('exit')) ,800);
-// // });
-// // result.then(
-// //     result => console.log(result))
-// //     .catch(error => console.error(error));
-// document.addEventListener('DOMContentLoaded', function () {
-//
-//
-//  //  function User(name) {
-//  //    if(!(this instanceof User)){
-//  //      return new User(name)
-//  //    }
-//  //    this.name = name;
-//  //  }
-//  //  User.prototype.say = function () {
-//  //    document.write(`Hello ${this.name} `);
-//  //  }
-//  //
-//  // let user = new User('Lenka');
-//  //  user.say();
-//
-// //   let data = new Date();
-// //   document.write(`Date -  ${data} `);
-// //
-// //   let str1 = 'string1';
-// //   let str2 = new String('string2');
-// // function list(str) {
-// //   document.write(`<br> ${str} `);
-// //   document.write(typeof str);
-// // }
-// // list(str1);
-// // list(str2);
-// //   bwc.tab.2150.l3dXWZXLV7DggoWytq.1673794418114
-// //   1670600559390
-// //   1673795141500
-//
-//   // alert( new Date().getTime() );
-//
-//   function User(name) {
-//     this.name = name;
-//     let privateName = 'private';
-//     this.publicName = 'public';
-//     this.get = function (){
-//       document.write(this.name + ' ' + privateName + ' ' + this.publicName + '<br>');
-//     }
-//   }
-//   // User.prototype.get = function (){
-//   //   document.write(this.name);
-//   // }
-//
-//   let kola = new User('Kola');
-//
-//
-//   kola.get();
-//   document.write(kola.publicName);
-//
-//
-// });
-
 
 </script>
 
 <style lang="scss">
 @import 'assets/style';
-//body.dark {
-//  /* custom dark bg color */
-//  --el-bg-color: #626aef;
-//}
-//
-//$color: lightslategrey;
-//.el-container {
-//  //background-color: $color;
-//}
-//
-//.el-aside {
-//  border: #030205 1px solid;
-//}
-//
-//.el-main {
-//  border: #030205 1px solid;
-//}
-//
-//.el-row {
-//  margin-bottom: 20px;
-//}
-//
-//.el-row:last-child {
-//  margin-bottom: 0;
-//}
-//
-//.el-col {
-//  border-radius: 4px;
-//}
-//
-//.grid-content {
-//  border-radius: 4px;
-//  border: #030205 1px solid;
-//  min-height: 36px;
-//}
+
 .select_item {
   display: flex;
   justify-content: space-between;
