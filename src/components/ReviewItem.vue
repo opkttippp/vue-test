@@ -8,6 +8,7 @@
     <div>
       <button-form @click="$emit('remove', review)">Delete</button-form>
       <button-form @click="$emit('edit', review)">Edit</button-form>
+      <button-form @click="$router.push(`/reviews/${review.id}`)">Open</button-form>
     </div>
   </div>
 
