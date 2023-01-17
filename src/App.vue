@@ -35,6 +35,19 @@
         <b-spinner class="float-right" label="Floated Right"></b-spinner>
       </div>
     </div>
+
+
+        <div class="page__wraper">
+          <div v-for="pageNumber in totalPage"
+               :key="pageNumber"
+               class="page"
+               :class="{'current-page': page === pageNumber}"
+               @click="changeNumber(pageNumber)"
+          >
+            {{pageNumber}}
+          </div>
+        </div>
+
   </div>
 
 </template>
@@ -69,10 +82,16 @@ export default {
       sortSelect: [
         {value: 'title', name: 'По названию'},
         {value: 'body', name: 'По содержанию'},
-      ]
+      ],
+      page: 1,
+      limit: 10,
+      totalPage: 0
     }
   },
   watch: {
+    page() {
+       this.fetchReview();
+    }
   },
   computed: {
     sortRev() {
@@ -80,7 +99,7 @@ export default {
     },
     searchListReview() {
       return this.sortRev.filter(rev => rev.title.toLowerCase().includes(this.searchList.toLowerCase()))
-      }
+    }
   },
   mounted() {
     this.fetchReview();
@@ -98,17 +117,27 @@ export default {
     },
     async fetchReview() {
       this.upload = true;
-      const res = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=5');
+      const res = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+        params: {
+          _page: this.page,
+          _limit: this.limit,
+        }
+      });
       try {
         this.reviews = res.data;
+        this.totalPage = Math.ceil(res.headers['x-total-count'] / this.limit);
       } catch (e) {
         alert('Ошибка подключения' + e.message);
       } finally {
         this.upload = false;
       }
+
     },
     closeModal() {
       this.show = false;
+    },
+    changeNumber(pageNumber) {
+      this.page = pageNumber;
     }
   }
 }
@@ -221,4 +250,19 @@ export default {
   box-sizing: border-box;
   height: 30px;
 }
+
+.page__wraper {
+  display: flex;
+  margin-top: 15px;
+}
+
+.page {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.current-page {
+  border: 2px solid teal;
+}
+
 </style>

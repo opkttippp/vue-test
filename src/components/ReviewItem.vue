@@ -1,6 +1,7 @@
 <template>
   <div class="review">
     <div>
+      <p>{{ review.id }}</p>
       <p>{{ review.title }}</p>
       <p>{{ review.body }}</p>
     </div>
