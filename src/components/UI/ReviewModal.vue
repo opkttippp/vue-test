@@ -1,8 +1,10 @@
 <template>
-  <div class="form" v-if="show" @click.self="this.$emit('closeModal')">
+  <div class="form" v-if="show" @click.self="this.$emit('update:show', false)">
     <div class="content">
-      <button type="button" class="btn-close shadow-none" aria-label="Close" @click="this.$emit('closeModal')">
-      </button>
+
+    <button type="button" class="btn-close shadow-none" aria-label="Close" @click="this.$emit('update:show', false)">
+    </button>
+
       <slot></slot>
     </div>
   </div>
@@ -38,5 +40,10 @@ export default {
   min-height: 50%;
   min-width: 50%;
   padding: 38px;
+}
+
+button {
+  position: relative;
+  right: -90%;
 }
 </style>

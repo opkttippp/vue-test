@@ -1,22 +1,13 @@
 <template>
   <form class="form" @submit.prevent>
 
-    <h3>Добавить отзыв</h3>
-    <input-form v-model="review.title">
-      Enter your name
+    <h3>ADD Review</h3>
+    <input-form v-focus v-model="review.title" placeholder="Enter your name...">
     </input-form>
-    <input-form v-model="review.body">
-      Enter review
+    <input-form v-model="review.body" placeholder="Enter review...">
     </input-form>
-    <button-form @click="createRev">
-      Оставить
-    </button-form>
+    <button-form @click="createRev">Оставить</button-form>
 
-    <!--    -->
-    <!--    <input class="input" v-model="review.title" type="text" placeholder="введите тему">-->
-    <!--    <input class="input" v-model="review.description" type="text" placeholder="введите текст">-->
-    <!--    <button class="btn btn-success" @click.prevent="createRev">Оставить</button>-->
-    <!--    v-model:value="review.description"-->
   </form>
 </template>
 

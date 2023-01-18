@@ -1,6 +1,5 @@
 <template>
   <input :value="modelValue" @input="updateInput" class="input" type="text">
-  <slot></slot>
 </template>
 
 <script>

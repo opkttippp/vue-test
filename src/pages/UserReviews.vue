@@ -1,22 +1,21 @@
 <template>
     <div class="select_item">
-
       <button-form @click="showForm">Оставить отзыв</button-form>
-
       <select-item
           v-model="sortValue"
           :options="sortSelect"
       >
       </select-item>
-
     </div>
 
     <input-form
         v-model="searchList"
         placeholder="Search..."
+        v-focus
     >
     </input-form>
-    <review-modal v-model:show="show" @closeModal="closeModal()">
+
+    <review-modal v-model:show="show">
       <form-review @create="createRev"></form-review>
     </review-modal>
 
@@ -35,7 +34,7 @@
       </div>
     </div>
 
-    <div ref="observer" class="observer"></div>
+    <div v-intersection="loadReview" class="observer"></div>
 
 </template>
 
@@ -85,17 +84,6 @@ export default {
   },
   mounted() {
     this.fetchReview();
-    const options = {
-      rootMargin: '0px',
-      threshold: 1.0
-    }
-    const callback = (entries) => {
-      if (entries[0].isIntersecting && this.page < this.totalPage) {
-        this.loadReview()
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer);
   },
   methods: {
     createRev(review) {
@@ -139,10 +127,7 @@ export default {
       } catch (e) {
         alert('Ошибка подключения' + e.message);
       }
-    },
-    closeModal() {
-      this.show = false;
-    },
+    }
   }
 }
 
