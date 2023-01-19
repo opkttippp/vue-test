@@ -2,8 +2,8 @@
   <div class="form" v-if="show" @click.self="this.$emit('update:show', false)">
     <div class="content">
 
-    <button type="button" class="btn-close shadow-none" aria-label="Close" @click="this.$emit('update:show', false)">
-    </button>
+      <button type="button" class="btn-close shadow-none" aria-label="Close" @click="this.$emit('update:show', false)">
+      </button>
 
       <slot></slot>
     </div>
@@ -11,14 +11,11 @@
 </template>
 
 <script>
+import visMixin from "@/mixins/visMixin";
+
 export default {
   name: "review-modal",
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
-  }
+  mixins: [visMixin]
 }
 </script>
 
