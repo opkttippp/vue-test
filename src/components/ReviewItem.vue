@@ -6,6 +6,12 @@
       <p>{{ review.body }}</p>
     </div>
     <div>
+      <h4>Likes - {{ $store.getters.getLikes }}
+        <button-form @click="$store.commit('incrementLike(review.id)')"> Like </button-form>
+        <button-form @click="$store.commit('decrementLike')"> Dislike </button-form>
+      </h4>
+    </div>
+    <div>
       <button-form @click="$emit('remove', review)">Delete</button-form>
       <button-form @click="$emit('edit', review)">Edit</button-form>
       <button-form @click="$router.push(`/reviews/${review.id}`)">Open</button-form>

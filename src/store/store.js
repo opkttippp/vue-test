@@ -1,49 +1,66 @@
 import {createStore} from "vuex"
 // let cart = window.localStorage.getItem('cart');
 
-
 const store = createStore(({
     state: {
-        counter: 0,
-        history: []
+    likes: 0
     },
-    actions: {
-        increment({commit}) {
-            commit('increment')
+    mutations: {
+        incrementLike(state) {
+            return state.likes +=1;
         },
-        decrement({commit}) {
-            commit('decrement')
-        },
-        asyncIncrement({commit}) {
-            setTimeout(() => {
-                commit('asyncIncrement')
-            }, 1000)
-
+        decrementLike(state) {
+            return state.likes -=1;
         }
     },
     getters: {
-        counter: (state) => state.counter,
-        history: (state) => state.history,
-        historyLength: (state) => state.history.length,
-    },
-    mutations: {
-        increment(state) {
-            state.counter++
-            state.history.push('Add +1');
-        },
-        decrement(state) {
-            state.counter--
-            state.history.push('Slice -1');
-        },
-        asyncIncrement(state) {
-                state.counter++
-                state.history.push('Add async +1');
-        },
-        delet(state) {
-            state.history.splice(0);
+        getLikes(state) {
+            return state.likes + 1;
         }
     }
 }))
+// const store = createStore(({
+//     state: {
+//         counter: 0,
+//         history: []
+//     },
+//     actions: {
+//         increment({commit}) {
+//             commit('increment')
+//         },
+//         decrement({commit}) {
+//             commit('decrement')
+//         },
+//         asyncIncrement({commit}) {
+//             setTimeout(() => {
+//                 commit('asyncIncrement')
+//             }, 1000)
+//
+//         }
+//     },
+//     getters: {
+//         counter: (state) => state.counter,
+//         history: (state) => state.history,
+//         historyLength: (state) => state.history.length,
+//     },
+//     mutations: {
+//         increment(state) {
+//             state.counter++
+//             state.history.push('Add +1');
+//         },
+//         decrement(state) {
+//             state.counter--
+//             state.history.push('Slice -1');
+//         },
+//         asyncIncrement(state) {
+//                 state.counter++
+//                 state.history.push('Add async +1');
+//         },
+//         delet(state) {
+//             state.history.splice(0);
+//         }
+//     }
+// }))
 // const store = createStore({
 //     state: {
 //     backendURL: "http://larav.local/api",

@@ -1,40 +1,41 @@
 <template>
-    <div class="select_item">
-      <button-form @click="showForm">Оставить отзыв</button-form>
-      <select-item
-          v-model="sortValue"
-          :options="sortSelect"
-      >
-      </select-item>
-    </div>
-
-    <input-form
-        v-model="searchList"
-        placeholder="Search..."
-        v-focus
+  <div class="select_item">
+    <button-form @click="showForm">Оставить отзыв</button-form>
+    <select-item
+        v-model="sortValue"
+        :options="sortSelect"
     >
-    </input-form>
+    </select-item>
+  </div>
 
-    <review-modal v-model:show="show">
-      <form-review @create="createRev"></form-review>
-    </review-modal>
+  <input-form
+      v-model="searchList"
+      placeholder="Search..."
+      v-focus
+  >
 
-    <p>Колличество отзывов - {{ reviews.length }}</p>
-    <list-review v-if="reviews.length > 0"
-                 :reviews="searchListReview"
-                 @remove="removeReview"
-    >
-    </list-review>
-    <div class="app" v-else style="border: 2px solid darkviolet">
-      Отзывов нет
+  </input-form>
+
+  <review-modal v-model:show="show">
+    <form-review @create="createRev"></form-review>
+  </review-modal>
+
+  <p>Колличество отзывов - {{ reviews.length }}</p>
+  <list-review v-if="reviews.length > 0"
+               :reviews="searchListReview"
+               @remove="removeReview"
+  >
+  </list-review>
+  <div class="app" v-else style="border: 2px solid darkviolet">
+    Отзывов нет
+  </div>
+  <div v-if="upload">
+    <div class="clearfix">
+      <b-spinner class="float-right" label="Floated Right"></b-spinner>
     </div>
-    <div v-if="upload">
-      <div class="clearfix">
-        <b-spinner class="float-right" label="Floated Right"></b-spinner>
-      </div>
-    </div>
+  </div>
 
-    <div v-intersection="loadReview" class="observer"></div>
+  <div v-intersection="loadReview" class="observer"></div>
 
 </template>
 
@@ -72,8 +73,7 @@ export default {
       totalPage: 0
     }
   },
-  watch: {
-  },
+  watch: {},
   computed: {
     sortRev() {
       return [...this.reviews].sort((rev1, rev2) => rev1[this.sortValue]?.localeCompare(rev2[this.sortValue]))
@@ -114,7 +114,7 @@ export default {
       }
     },
     async loadReview() {
-      this.page +=1;
+      this.page += 1;
       const res = await axios.get('https://jsonplaceholder.typicode.com/posts', {
         params: {
           _page: this.page,
