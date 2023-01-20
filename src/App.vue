@@ -1,34 +1,44 @@
 <template>
   <div class="app">
-    <navbar-menu></navbar-menu>
-    <router-view></router-view>
+        <navbar-menu></navbar-menu>
+        <router-view></router-view>
+
   </div>
 </template>
 
 <script>
+// import Velocity from "velocity-animate"
 
 document.addEventListener('DOMContentLoaded', function () {
-
-  /*  let surename = {
-      name: 'Guchik',
-      aje: 36
-    }
-
-    let jsSurename = JSON.stringify(surename);
-
-
-    localStorage.setItem('name', 'Ivanchenko');
-    localStorage.setItem('surename', jsSurename);
-    sessionStorage.setItem('name', 'Petrovich');
-
-    let dora =  JSON.parse(localStorage.getItem('surename'));*/
-
+  // const ball = document.querySelector('.ball');
+  // Velocity(ball, {translateY: '130px'},
+  //     {easing: [1000, 20], duration: 2000});
+//
+//   console.log('one');
+//   const pro = new Promise((resolve, reject) => {
+//
+//    setTimeout(() => resolve('Hello!!'), 2000)
+//    setTimeout(() => reject(new Error('Error')), 1000)
+//
+//   });
+//
+//   pro.then((res) => console.log(res)).catch(error => console.log(error));
+//
 })
 
 
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+    }
+  },
+  mounted() {
+    this.show = false;
+  }
 }
 </script>
+
 <style lang="scss">
+
 </style>

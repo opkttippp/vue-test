@@ -1,24 +1,25 @@
 <template>
   <div class="select_item">
     <button-form @click="showForm">Оставить отзыв</button-form>
-    <select-item
-        v-model="sortValue"
-        :options="sortSelect"
-    >
-    </select-item>
+        <select-item
+            :model-value="sortValue"
+            @update:model-value="setSortValue"
+            :options="sortSelect"
+        >
+        </select-item>
   </div>
 
-  <input-form
-      v-model="searchList"
-      placeholder="Search..."
-      v-focus
-  >
+    <input-form
+        :model-value="searchList"
+        @update:model-value="setSearchList"
+        placeholder="Search..."
+        v-focus
+    >
+    </input-form>
 
-  </input-form>
-
-  <review-modal v-model:show="show">
-    <form-review @create="createRev"></form-review>
-  </review-modal>
+    <review-modal v-model:show="show">
+      <form-review @create="createRev"></form-review>
+    </review-modal>
 
   <p>Колличество отзывов - {{ reviews.length }}</p>
   <list-review v-if="reviews.length > 0"
@@ -44,8 +45,7 @@
 import FormReview from '../components/FormReview.vue'
 import ListReview from '../components/ListReview.vue'
 import SelectItem from '../components/UI/SelectItem'
-import axios from "axios";
-
+import { mapState, mapGetters, mapActions, mapMutations} from 'vuex'
 
 export default {
   name: 'user-reviews',
@@ -56,77 +56,49 @@ export default {
   },
   data() {
     return {
-      title: '',
-      description: '',
-      reviews: [],
       show: false,
-      upload: false,
-      count: Number,
-      sortValue: '',
-      searchList: '',
-      sortSelect: [
-        {value: 'title', name: 'По названию'},
-        {value: 'body', name: 'По содержанию'},
-      ],
-      page: 1,
-      limit: 10,
-      totalPage: 0
     }
   },
   watch: {},
   computed: {
-    sortRev() {
-      return [...this.reviews].sort((rev1, rev2) => rev1[this.sortValue]?.localeCompare(rev2[this.sortValue]))
-    },
-    searchListReview() {
-      return this.sortRev.filter(rev => rev.title.toLowerCase().includes(this.searchList.toLowerCase()))
-    }
+    ...mapState({
+      title: state => state.reviews.title,
+      description: state => state.reviews.description,
+      reviews:  state => state.reviews.reviews,
+      upload:  state => state.reviews.upload,
+      count:  state => state.reviews.count,
+      sortValue:  state => state.reviews.sortValue,
+      searchList:  state => state.reviews.searchList,
+      sortSelect:  state => state.reviews.sortSelect,
+      page:  state => state.reviews.page,
+      limit:  state => state.reviews.limit,
+      totalPage:  state => state.reviews.totalPage
+    }),
+    ...mapGetters({
+      sortRev: 'reviews/sortRev',
+      searchListReview: 'reviews/searchListReview',
+    })
   },
   mounted() {
     this.fetchReview();
   },
   methods: {
+    ...mapActions({
+      fetchReview: 'reviews/fetchReview',
+      loadReview: 'reviews/loadReview'
+    }),
+    ...mapMutations({
+      setPage: 'reviews/setPage',
+      setSearchList: 'reviews/setSearchList',
+      setSortValue: 'reviews/setSortValue',
+      removeReview: 'reviews/removeReview'
+    }),
     createRev(review) {
       this.reviews.push(review);
       this.show = false;
     },
-    removeReview(review) {
-      this.reviews = this.reviews.filter(p => p.id !== review.id)
-    },
     showForm() {
       this.show = true;
-    },
-    async fetchReview() {
-      this.upload = true;
-      const res = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-        params: {
-          _page: this.page,
-          _limit: this.limit,
-        }
-      });
-      try {
-        this.reviews = res.data;
-        this.totalPage = Math.ceil(res.headers['x-total-count'] / this.limit);
-      } catch (e) {
-        alert('Ошибка подключения' + e.message);
-      } finally {
-        this.upload = false;
-      }
-    },
-    async loadReview() {
-      this.page += 1;
-      const res = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-        params: {
-          _page: this.page,
-          _limit: this.limit,
-        }
-      });
-      try {
-        this.totalPage = Math.ceil(res.headers['x-total-count'] / this.limit);
-        this.reviews = [...this.reviews, ...res.data]
-      } catch (e) {
-        alert('Ошибка подключения' + e.message);
-      }
     }
   }
 }

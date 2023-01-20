@@ -1,8 +1,12 @@
 import {createStore} from "vuex"
+import {reviewsModule} from "@/store/reviewsModule";
 // let cart = window.localStorage.getItem('cart');
 
 const store = createStore(({
-    state: {
+    modules: {
+        reviews: reviewsModule
+    },
+/*    state: {
         likes: []
     },
     mutations: {
@@ -45,15 +49,15 @@ const store = createStore(({
                 result = result.amount
             return result
         },
-    },
-    actions: {
-        // incrementLikes({commit}, id) {
-        //     commit('SET_LIKE_STATE', id);
-        // },
-        // decrementLikes({commit}, id) {
-        //     commit('DELETE_LIKE_STATE', id);
-        // }
-    },
+    },*/
+/*    actions: {
+        incrementLikes({commit}, id) {
+            commit('SET_LIKE_STATE', id);
+        },
+        decrementLikes({commit}, id) {
+            commit('DELETE_LIKE_STATE', id);
+        }
+    },*/
 }))
 // const store = createStore(({
 //     state: {

@@ -4,7 +4,7 @@ import store from './store/store';
 import router from "@/router/router";
 import axios from "axios";
 import App from '@/App.vue';
-import BootstrapVue from 'bootstrap-vue-3';
+import BootstrapVue from 'bootstrap-vue-next';
 import 'bootstrap/dist/css/bootstrap.css'
 
 
@@ -20,6 +20,7 @@ components.forEach(component => {
 directive.forEach(directive => {
     app.directive(directive.name, directive)
 })
+// App.prototype.axios = axios;
 
 app.use(BootstrapVue)
 app.use(store)
