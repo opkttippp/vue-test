@@ -6,9 +6,10 @@
       <p>{{ review.body }}</p>
     </div>
     <div>
-      <h4>Likes - {{ $store.getters.getLikes }}
-        <button-form @click="$store.commit('incrementLike(review.id)')"> Like </button-form>
-        <button-form @click="$store.commit('decrementLike')"> Dislike </button-form>
+      <h4>Likes - {{ $store.getters.getLikes(review.id) }}
+<!--      <h4>Likes - {{ }}-->
+        <button-form @click="$store.dispatch('incrementLikes', review.id)"> Like </button-form>
+        <button-form @click="$store.dispatch('decrementLikes', review.id)"> Dislike </button-form>
       </h4>
     </div>
     <div>

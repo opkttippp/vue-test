@@ -3,21 +3,57 @@ import {createStore} from "vuex"
 
 const store = createStore(({
     state: {
-    likes: 0
+        likes: []
     },
     mutations: {
-        incrementLike(state) {
-            return state.likes +=1;
+        SET_LIKE_STATE(state, id) {
+            if (state.likes.length) {
+                let isLikes = false;
+                state.likes.map(function (item) {
+                    if (item.id === id) {
+                        item.amount++;
+                        isLikes = true;
+                    }
+                })
+                if (!isLikes) {
+                    state.likes.push({
+                        id,
+                        amount: 1,
+                    });
+                }
+            } else {
+                state.likes.push({
+                    id,
+                    amount: 1,
+                });
+            }
         },
-        decrementLike(state) {
-            return state.likes -=1;
-        }
+        DELETE_LIKE_STATE(state, id) {
+
+                state.likes.map(function (item) {
+                    if (item.id === id && item.amount > 0) {
+                        item.amount--;
+                    }
+                })
+
+        },
     },
     getters: {
-        getLikes(state) {
-            return state.likes + 1;
-        }
-    }
+        getLikes: (state) => (id) => {
+            let result = state.likes.find(likes => likes.id === id).amount ?? 0;
+            if (result)
+                result = result.amount
+            return result
+        },
+    },
+    actions: {
+        // incrementLikes({commit}, id) {
+        //     commit('SET_LIKE_STATE', id);
+        // },
+        // decrementLikes({commit}, id) {
+        //     commit('DELETE_LIKE_STATE', id);
+        // }
+    },
 }))
 // const store = createStore(({
 //     state: {
